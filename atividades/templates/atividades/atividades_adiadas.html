@@ -1,0 +1,25 @@
+{% extends 'base.html' %}
+
+{% block title %} Atividades Adiadas {% endblock %}
+
+{% block content %}
+ <div class="h-100 p-5 bg-light border rounded-3">
+    <h1>Atividades Adiadas</h1>
+    <div class="list-group">
+        {% for atividade in atividades_adiadas_list %}
+            <div class="list-group-item list-group-item-success d-flex justify-content-between align-items-center">
+                <div>
+                    <strong>{{ atividade.descricao }}</strong> - <em>{{ atividade.categoria }}</em>
+                </div>
+                <div>
+                    <a class="btn btn-sm btn-success" href="{% url 'mover_para_atividades' atividade.id %}">Mover para atividades</a>
+                    <a class="btn btn-sm btn-danger" href="{% url 'excluir_atividade' atividade.id %}">Excluir</a>
+                    <a class="btn btn-sm btn-primary" href="{% url 'editar_atividade' atividade.id %}">Editar</a>
+                </div>
+            </div>
+        {% empty %}
+            <p>Nenhuma atividade adiada.</p>    
+        {% endfor %}
+    </div>
+</div>
+{% endblock %}

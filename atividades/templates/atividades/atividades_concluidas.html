@@ -1,0 +1,22 @@
+{% extends 'base.html' %}
+
+{% block title %} Atividades Concluídas {% endblock %}
+
+{% block content %}
+ <div class="h-100 p-5 bg-light border rounded-3">
+    <h1>Atividades Concluídas</h1>
+    <div class="list-group">
+        {% for atividade in atividades_concluidas %}
+            <div class="list-group-item list-group-item-success d-flex justify-content-between align-items-center">
+                <div>
+                    <strong>{{ atividade.descricao }}</strong> - <em>{{ atividade.categoria }}</em>
+                </div>
+                <div>
+                    <a class="btn btn-sm btn-primary" href="{% url 'editar_atividade' atividade.id %}">Editar</a>
+                    <a class="btn btn-sm btn-danger" href="{% url 'excluir_atividade' atividade.id %}">Excluir</a>
+                </div>
+            </div>
+        {% endfor %}
+    </div>
+</div>
+{% endblock %}

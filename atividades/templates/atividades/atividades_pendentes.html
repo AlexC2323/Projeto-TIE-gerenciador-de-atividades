@@ -1,0 +1,65 @@
+{% extends 'base.html' %}
+{% load crispy_forms_tags %}
+
+{% block title %}Atividades Pendentes{% endblock %}
+
+{% block content %}
+
+<div class="h-100 p-5 bg-light border rounded-3">
+    <h1>Adicionar Tarefa</h1>
+    <form method="post">
+        {% csrf_token %}
+        {{ form|crispy }}
+        <br>
+        <input class="btn btn-success" type="submit" value="Salvar">
+    </form>
+    <hr>
+
+    <h1>Atividades Pendentes</h1>
+    <div class="list-group">
+        {% for atividade in atividades %}
+            {% if atividade.categoria == 'urgente' %}
+                <button type="button" class="list-group-item list-group-item-danger list-group-item-action" data-bs-toggle="modal" data-bs-target="#modal{{ atividade.id }}">
+                    <h5>{{ atividade.descricao }}</h5>
+                    <small>Criado em: {{ atividade.data_criacao.day }}/{{ atividade.data_criacao.month }}/{{ atividade.data_criacao.year }}</small>
+                    <small>Vencimento: {{ atividade.data_vencimento|date:"d/m/Y" }}</small>
+                </button>
+            {% elif atividade.categoria == 'importante' %}
+                <button type="button" class="list-group-item list-group-item-warning list-group-item-action" data-bs-toggle="modal" data-bs-target="#modal{{ atividade.id }}">
+                    <h5>{{ atividade.descricao }}</h5>
+                    <small>Criado em: {{ atividade.data_criacao.day }}/{{ atividade.data_criacao.month }}/{{ atividade.data_criacao.year }}</small>
+                    <small>Vencimento: {{ atividade.data_vencimento|date:"d/m/Y" }}</small>
+                </button>
+            {% else %}
+                <button type="button" class="list-group-item list-group-item-secondary list-group-item-action" data-bs-toggle="modal" data-bs-target="#modal{{ atividade.id }}">
+                    <h5>{{ atividade.descricao }}</h5>
+                    <small>Criado em: {{ atividade.data_criacao.day }}/{{ atividade.data_criacao.month }}/{{ atividade.data_criacao.year }}</small>
+                    <small>Vencimento: {{ atividade.data_vencimento|date:"d/m/Y" }}</small>
+                </button>
+            {% endif %}
+
+            <div class="modal fade" id="modal{{ atividade.id }}" tabindex="-1" aria-labelledby="modalLabel{{ atividade.id }}" aria-hidden="true">
+              <div class="modal-dialog">
+                <div class="modal-content">
+                  <div class="modal-header">
+                    <h1 class="modal-title fs-5" id="modalLabel{{ atividade.id }}">{{ atividade.descricao }} | {{ atividade.categoria|capfirst }}</h1>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                  </div>
+                  <div class="modal-body">
+                    <p>
+                       <a class="btn btn-success" href="{% url 'concluir_atividade' atividade.id %}">Concluir</a>
+                       <a class="btn btn-danger" href="{% url 'excluir_atividade' atividade.id %}">Excluir</a>
+                       <a class="btn btn-warning" href="{% url 'adiar_atividade' atividade.id %}">Adiar</a>
+                       <a class="btn btn-primary" href="{% url 'editar_atividade' atividade.id %}">Editar</a>
+                    </p>
+                  </div>
+                </div>
+              </div>
+            </div>
+        {% empty %}
+            <p>Nenhuma atividade pendente.</p>
+        {% endfor %}
+    </div>
+</div>
+
+{% endblock %}
